@@ -5,7 +5,7 @@ struct ContentView: View {
     @State private var selectedTab: Tab = .journal
 
     enum Tab {
-        case journal, map, settings
+        case journal, crawls, map, settings
     }
 
     var body: some View {
@@ -15,6 +15,12 @@ struct ContentView: View {
                     Label("Journal", systemImage: "book.closed")
                 }
                 .tag(Tab.journal)
+
+            CrawlsView()
+                .tabItem {
+                    Label("Crawls", systemImage: "figure.walk")
+                }
+                .tag(Tab.crawls)
 
             MapTabView()
                 .tabItem {

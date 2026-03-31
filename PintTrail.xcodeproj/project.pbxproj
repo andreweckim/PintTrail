@@ -7,31 +7,47 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06E21055A67E606F2DBA7C0F /* CrawlCheckIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE132DA14C83F8CAF342CBD /* CrawlCheckIn.swift */; };
 		088D894ABA5840AE7EAA4F85 /* MapTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6AF703FFA7410B6F53E074C /* MapTabView.swift */; };
 		1058011E5B55C8232AA18893 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0C943165A320A55F95DDB0 /* ContentView.swift */; };
+		10C1F2A2F5D977DA48FAF6D2 /* InviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0F1B774B376999E2B3130 /* InviteView.swift */; };
+		2B90E9B49015BFC13A77355A /* PubCrawl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B30BBD2F47BAE9DEB353868 /* PubCrawl.swift */; };
+		2D37651DCB9E9C597EDA3EEC /* CrawlCheckInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BB39598E5B30D4FF72AEA1 /* CrawlCheckInView.swift */; };
 		2DEDB6281324E2B0AD21929B /* PintTrailApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A48AC1F1EC6CE29F1DA74 /* PintTrailApp.swift */; };
 		3489BE96763ADFEB7466F40C /* BeerDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF37755F02D94D0E0193E8C /* BeerDetailView.swift */; };
+		397730E5CB73AAC21A0F0BA8 /* CrawlRecapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B72B28D0F01738F5AC78497 /* CrawlRecapView.swift */; };
 		40842A77E1E4E365AC61D4FD /* AddBeerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D3FDA845E57842F2653EA0 /* AddBeerView.swift */; };
+		44011DC1ED53CFF9E04882F7 /* CrawlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ECFDE8B3BA077C5C20718D6 /* CrawlsView.swift */; };
 		65F78C7885AC096D3081A9C4 /* JournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731C882AD6B9F3CBA728CFFF /* JournalView.swift */; };
 		6D8A23D084B74C4CCDAE8848 /* BeerEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE432720796048CECF1BB67 /* BeerEntry.swift */; };
 		7B6A84BE2C355C99A9B75033 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1663AD66EA6F46B5C17AEE79 /* Assets.xcassets */; };
+		971870BCD8BB687BC912C311 /* CrawlDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C990CB70D55012CFABB9634 /* CrawlDetailView.swift */; };
 		988AAE1780D5A85D3E1344AC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E017F7F7650B7C2FF76EA27 /* SettingsView.swift */; };
+		E78974C6B38FA771E8FB5F09 /* CreateCrawlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA22A97F901723F8E7BE8C /* CreateCrawlView.swift */; };
 		EDE48DAB49B8534E2DA0F7B9 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A6982C86619EBF5C8178A3 /* LocationManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		01DA22A97F901723F8E7BE8C /* CreateCrawlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCrawlView.swift; sourceTree = "<group>"; };
 		1663AD66EA6F46B5C17AEE79 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1ECFDE8B3BA077C5C20718D6 /* CrawlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrawlsView.swift; sourceTree = "<group>"; };
+		21BB39598E5B30D4FF72AEA1 /* CrawlCheckInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrawlCheckInView.swift; sourceTree = "<group>"; };
 		22A6982C86619EBF5C8178A3 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		22D3FDA845E57842F2653EA0 /* AddBeerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBeerView.swift; sourceTree = "<group>"; };
 		2EE432720796048CECF1BB67 /* BeerEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerEntry.swift; sourceTree = "<group>"; };
+		4AD0F1B774B376999E2B3130 /* InviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteView.swift; sourceTree = "<group>"; };
+		4B72B28D0F01738F5AC78497 /* CrawlRecapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrawlRecapView.swift; sourceTree = "<group>"; };
+		4C990CB70D55012CFABB9634 /* CrawlDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrawlDetailView.swift; sourceTree = "<group>"; };
 		4F46DEFE8B847CADF195C610 /* PintTrail.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PintTrail.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CF5BCBC1F8F341C2C91AE02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		6B30BBD2F47BAE9DEB353868 /* PubCrawl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubCrawl.swift; sourceTree = "<group>"; };
 		731C882AD6B9F3CBA728CFFF /* JournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalView.swift; sourceTree = "<group>"; };
 		7C8A48AC1F1EC6CE29F1DA74 /* PintTrailApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PintTrailApp.swift; sourceTree = "<group>"; };
 		7D0C943165A320A55F95DDB0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7E017F7F7650B7C2FF76EA27 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8CF37755F02D94D0E0193E8C /* BeerDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerDetailView.swift; sourceTree = "<group>"; };
 		F6AF703FFA7410B6F53E074C /* MapTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTabView.swift; sourceTree = "<group>"; };
+		FFE132DA14C83F8CAF342CBD /* CrawlCheckIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrawlCheckIn.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -61,6 +77,8 @@
 			isa = PBXGroup;
 			children = (
 				2EE432720796048CECF1BB67 /* BeerEntry.swift */,
+				FFE132DA14C83F8CAF342CBD /* CrawlCheckIn.swift */,
+				6B30BBD2F47BAE9DEB353868 /* PubCrawl.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -78,6 +96,12 @@
 			children = (
 				22D3FDA845E57842F2653EA0 /* AddBeerView.swift */,
 				8CF37755F02D94D0E0193E8C /* BeerDetailView.swift */,
+				21BB39598E5B30D4FF72AEA1 /* CrawlCheckInView.swift */,
+				4C990CB70D55012CFABB9634 /* CrawlDetailView.swift */,
+				4B72B28D0F01738F5AC78497 /* CrawlRecapView.swift */,
+				1ECFDE8B3BA077C5C20718D6 /* CrawlsView.swift */,
+				01DA22A97F901723F8E7BE8C /* CreateCrawlView.swift */,
+				4AD0F1B774B376999E2B3130 /* InviteView.swift */,
 				731C882AD6B9F3CBA728CFFF /* JournalView.swift */,
 				F6AF703FFA7410B6F53E074C /* MapTabView.swift */,
 				7E017F7F7650B7C2FF76EA27 /* SettingsView.swift */,
@@ -93,7 +117,7 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		"TEMP_9476C0F2-8061-408F-B901-15F4EABC1DEF" /* Preview Content */ = {
+		"TEMP_ECFED804-F577-4471-8708-4C35949134C0" /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -171,10 +195,18 @@
 				3489BE96763ADFEB7466F40C /* BeerDetailView.swift in Sources */,
 				6D8A23D084B74C4CCDAE8848 /* BeerEntry.swift in Sources */,
 				1058011E5B55C8232AA18893 /* ContentView.swift in Sources */,
+				06E21055A67E606F2DBA7C0F /* CrawlCheckIn.swift in Sources */,
+				2D37651DCB9E9C597EDA3EEC /* CrawlCheckInView.swift in Sources */,
+				971870BCD8BB687BC912C311 /* CrawlDetailView.swift in Sources */,
+				397730E5CB73AAC21A0F0BA8 /* CrawlRecapView.swift in Sources */,
+				44011DC1ED53CFF9E04882F7 /* CrawlsView.swift in Sources */,
+				E78974C6B38FA771E8FB5F09 /* CreateCrawlView.swift in Sources */,
+				10C1F2A2F5D977DA48FAF6D2 /* InviteView.swift in Sources */,
 				65F78C7885AC096D3081A9C4 /* JournalView.swift in Sources */,
 				EDE48DAB49B8534E2DA0F7B9 /* LocationManager.swift in Sources */,
 				088D894ABA5840AE7EAA4F85 /* MapTabView.swift in Sources */,
 				2DEDB6281324E2B0AD21929B /* PintTrailApp.swift in Sources */,
+				2B90E9B49015BFC13A77355A /* PubCrawl.swift in Sources */,
 				988AAE1780D5A85D3E1344AC /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
