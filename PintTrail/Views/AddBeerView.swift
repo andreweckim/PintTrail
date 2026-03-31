@@ -205,8 +205,9 @@ struct AddBeerView: View {
         }
 
         pendingEntry = entry
-        modelContext.insert(entry)
-        rankingEngine.startRanking(newEntry: entry, existingEntries: existingEntries) {
+        let entriesToCompare = Array(existingEntries)
+        rankingEngine.startRanking(newEntry: entry, existingEntries: entriesToCompare) {
+            modelContext.insert(entry)
             dismiss()
         }
     }
