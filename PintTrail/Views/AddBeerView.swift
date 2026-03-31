@@ -19,10 +19,44 @@ struct AddBeerView: View {
     @State private var rankingEngine = RankingEngine()
     @State private var pendingEntry: BeerEntry?
 
+    @State private var showingScanner = false
+    @State private var isLookingUp = false
+    @State private var lookupError: String?
+
+    private let barcodeService = BarcodeService()
+
     var body: some View {
         NavigationStack {
             ZStack {
                 Form {
+                    // Barcode scan button
+                    Section {
+                        Button {
+                            showingScanner = true
+                        } label: {
+                            Label("Scan Barcode", systemImage: "barcode.viewfinder")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 6)
+                        }
+                        .tint(.orange)
+
+                        if isLookingUp {
+                            HStack {
+                                ProgressView()
+                                    .padding(.trailing, 4)
+                                Text("Looking up beer...")
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+
+                        if let error = lookupError {
+                            Label(error, systemImage: "exclamationmark.triangle")
+                                .font(.caption)
+                                .foregroundStyle(.orange)
+                        }
+                    }
+
                     Section("Beer Info") {
                         TextField("Beer Name", text: $name)
                         TextField("Brewery", text: $brewery)
@@ -104,6 +138,51 @@ struct AddBeerView: View {
             .onAppear {
                 locationManager.requestPermission()
             }
+            .fullScreenCover(isPresented: $showingScanner) {
+                ZStack(alignment: .topTrailing) {
+                    BarcodeScannerView { barcode in
+                        showingScanner = false
+                        lookupBarcode(barcode)
+                    }
+                    .ignoresSafeArea()
+
+                    Button {
+                        showingScanner = false
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.title)
+                            .foregroundStyle(.white)
+                            .padding()
+                    }
+                }
+            }
+        }
+    }
+
+    private func lookupBarcode(_ barcode: String) {
+        isLookingUp = true
+        lookupError = nil
+
+        Task {
+            do {
+                if let product = try await barcodeService.lookup(barcode: barcode) {
+                    name = product.name
+                    brewery = product.brand
+                    style = product.style
+
+                    // Try to load product image
+                    if let imageURL = product.imageURL {
+                        if let (data, _) = try? await URLSession.shared.data(from: imageURL) {
+                            photoData = data
+                        }
+                    }
+                } else {
+                    lookupError = "Beer not found — enter details manually"
+                }
+            } catch {
+                lookupError = "Lookup failed — enter details manually"
+            }
+            isLookingUp = false
         }
     }
 
@@ -121,7 +200,6 @@ struct AddBeerView: View {
         )
 
         if existingEntries.isEmpty {
-            // First beer — auto rank #1
             modelContext.insert(entry)
             dismiss()
             return
@@ -129,7 +207,6 @@ struct AddBeerView: View {
 
         pendingEntry = entry
         rankingEngine.startRanking(newEntry: entry, existingEntries: existingEntries) { position in
-            // Shift existing entries down
             for existing in existingEntries where existing.rankPosition >= position {
                 existing.rankPosition += 1
             }
