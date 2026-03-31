@@ -84,10 +84,7 @@ struct SettingsView: View {
                     .padding()
                 }
             }
-            .navigationTitle("Settings")
-            .toolbarColorScheme(.dark, for: .navigationBar)
-            .toolbarBackground(PTTheme.background, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
+            .navigationBarHidden(true)
         }
         .preferredColorScheme(.dark)
     }

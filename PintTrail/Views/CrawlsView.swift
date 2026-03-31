@@ -31,11 +31,30 @@ struct CrawlsView: View {
                             .font(.subheadline)
                             .foregroundStyle(PTTheme.creamDim)
                             .multilineTextAlignment(.center)
+
+                        Button(action: { showingCreateCrawl = true }) {
+                            Label("Start a Crawl", systemImage: "plus")
+                                .font(.subheadline.bold())
+                                .foregroundStyle(PTTheme.stout)
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 10)
+                                .background(PTTheme.amber)
+                                .clipShape(Capsule())
+                        }
                     }
                     .padding()
                 } else {
                     ScrollView {
                         VStack(spacing: 16) {
+                            HStack {
+                                Spacer()
+                                Button(action: { showingCreateCrawl = true }) {
+                                    Image(systemName: "plus")
+                                        .font(.body)
+                                        .foregroundStyle(PTTheme.amber)
+                                }
+                            }
+
                             if !activeCrawls.isEmpty {
                                 VStack(alignment: .leading, spacing: 10) {
                                     PTSectionHeader(title: "Active")
@@ -66,18 +85,7 @@ struct CrawlsView: View {
                     }
                 }
             }
-            .navigationTitle("Crawls")
-            .toolbarColorScheme(.dark, for: .navigationBar)
-            .toolbarBackground(PTTheme.background, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: { showingCreateCrawl = true }) {
-                        Image(systemName: "plus")
-                            .foregroundStyle(PTTheme.amber)
-                    }
-                }
-            }
+            .navigationBarHidden(true)
             .sheet(isPresented: $showingCreateCrawl) {
                 CreateCrawlView()
             }

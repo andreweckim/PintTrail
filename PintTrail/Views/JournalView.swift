@@ -35,6 +35,35 @@ struct JournalView: View {
                 } else {
                     ScrollView {
                         LazyVStack(spacing: 14) {
+                            // Inline toolbar
+                            HStack {
+                                Menu {
+                                    Button {
+                                        sortByRank = true
+                                    } label: {
+                                        Label("By Ranking", systemImage: sortByRank ? "checkmark" : "")
+                                    }
+                                    Button {
+                                        sortByRank = false
+                                    } label: {
+                                        Label("By Date", systemImage: sortByRank ? "" : "checkmark")
+                                    }
+                                } label: {
+                                    Image(systemName: "arrow.up.arrow.down")
+                                        .font(.body)
+                                        .foregroundStyle(PTTheme.amber)
+                                }
+
+                                Spacer()
+
+                                Button(action: { showingAddEntry = true }) {
+                                    Image(systemName: "plus")
+                                        .font(.body)
+                                        .foregroundStyle(PTTheme.amber)
+                                }
+                            }
+                            .padding(.horizontal, 4)
+
                             ForEach(Array(sortedEntries.enumerated()), id: \.element.id) { _, entry in
                                 NavigationLink(destination: BeerDetailView(entry: entry, totalEntries: entries.count)) {
                                     BeerCard(entry: entry, rank: entry.rankPosition + 1, totalEntries: entries.count)
@@ -43,40 +72,12 @@ struct JournalView: View {
                             }
                         }
                         .padding(.horizontal)
-                        .padding(.top, 8)
+                        .padding(.top, 12)
                         .padding(.bottom, 20)
                     }
                 }
             }
-            .navigationTitle("Pint Trail")
-            .toolbarColorScheme(.dark, for: .navigationBar)
-            .toolbarBackground(PTTheme.background, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Menu {
-                        Button {
-                            sortByRank = true
-                        } label: {
-                            Label("By Ranking", systemImage: sortByRank ? "checkmark" : "")
-                        }
-                        Button {
-                            sortByRank = false
-                        } label: {
-                            Label("By Date", systemImage: sortByRank ? "" : "checkmark")
-                        }
-                    } label: {
-                        Image(systemName: "arrow.up.arrow.down")
-                            .foregroundStyle(PTTheme.amber)
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: { showingAddEntry = true }) {
-                        Image(systemName: "plus")
-                            .foregroundStyle(PTTheme.amber)
-                    }
-                }
-            }
+            .navigationBarHidden(true)
             .sheet(isPresented: $showingAddEntry) {
                 AddBeerView()
             }
@@ -92,7 +93,6 @@ struct BeerCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Photo
             ZStack(alignment: .topLeading) {
                 if let photoData = entry.photoData,
                    let uiImage = UIImage(data: photoData) {
@@ -129,7 +129,6 @@ struct BeerCard: View {
                     .padding(10)
             }
 
-            // Info
             VStack(alignment: .leading, spacing: 6) {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 2) {

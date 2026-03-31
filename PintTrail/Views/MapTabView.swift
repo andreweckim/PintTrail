@@ -43,10 +43,7 @@ struct MapTabView: View {
                     .colorScheme(.dark)
                 }
             }
-            .navigationTitle("Beer Map")
-            .toolbarColorScheme(.dark, for: .navigationBar)
-            .toolbarBackground(PTTheme.background, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
+            .navigationBarHidden(true)
         }
         .preferredColorScheme(.dark)
     }
