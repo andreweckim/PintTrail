@@ -40,9 +40,19 @@ struct JournalView: View {
                         Text("No Beers Yet")
                             .font(.title2.bold())
                             .foregroundStyle(PTTheme.cream)
-                        Text("Tap + to log your first beer")
+                        Text("Log your first beer to start your trail")
                             .font(.subheadline)
                             .foregroundStyle(PTTheme.creamDim)
+
+                        Button(action: { showingAddEntry = true }) {
+                            Label("Log a Beer", systemImage: "plus")
+                                .font(.subheadline.bold())
+                                .foregroundStyle(PTTheme.stout)
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 10)
+                                .background(PTTheme.amber)
+                                .clipShape(Capsule())
+                        }
                     }
                 } else {
                     ScrollView {
