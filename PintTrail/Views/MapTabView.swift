@@ -12,13 +12,21 @@ struct MapTabView: View {
 
     var body: some View {
         NavigationStack {
-            Group {
+            ZStack {
+                PTTheme.background.ignoresSafeArea()
+
                 if entriesWithLocation.isEmpty {
-                    ContentUnavailableView(
-                        "No Locations Yet",
-                        systemImage: "map",
-                        description: Text("Log a beer with location tagging to see it here")
-                    )
+                    VStack(spacing: 16) {
+                        Image(systemName: "map")
+                            .font(.system(size: 48))
+                            .foregroundStyle(PTTheme.amber.opacity(0.4))
+                        Text("No Locations Yet")
+                            .font(.title2.bold())
+                            .foregroundStyle(PTTheme.cream)
+                        Text("Log a beer with location tagging to see it here")
+                            .font(.subheadline)
+                            .foregroundStyle(PTTheme.creamDim)
+                    }
                 } else {
                     Map(position: $position) {
                         ForEach(entriesWithLocation) { entry in
@@ -28,14 +36,19 @@ struct MapTabView: View {
                                     systemImage: "mug",
                                     coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon)
                                 )
-                                .tint(.orange)
+                                .tint(PTTheme.amber)
                             }
                         }
                     }
+                    .colorScheme(.dark)
                 }
             }
             .navigationTitle("Beer Map")
+            .toolbarColorScheme(.dark, for: .navigationBar)
+            .toolbarBackground(PTTheme.background, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
         }
+        .preferredColorScheme(.dark)
     }
 }
 

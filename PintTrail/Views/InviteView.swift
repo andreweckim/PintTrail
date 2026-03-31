@@ -11,61 +11,72 @@ struct InviteView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
-                Spacer()
+            ZStack {
+                PTTheme.background.ignoresSafeArea()
 
-                Text("Invite Friends")
-                    .font(.title.bold())
+                VStack(spacing: 24) {
+                    Spacer()
 
-                Text("Share this code or QR to let friends join your crawl")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
+                    Text("Invite Friends")
+                        .font(.title.bold())
+                        .foregroundStyle(PTTheme.cream)
 
-                // Invite code
-                Text(crawl.inviteCode)
-                    .font(.system(size: 36, weight: .bold, design: .monospaced))
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(.secondary.opacity(0.1))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    Text("Share this code or QR to let friends join your crawl")
+                        .font(.subheadline)
+                        .foregroundStyle(PTTheme.creamDim)
+                        .multilineTextAlignment(.center)
 
-                // QR Code
-                if let qrImage = generateQRCode(from: deepLink) {
-                    Image(uiImage: qrImage)
-                        .interpolation(.none)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 200, height: 200)
+                    // Invite code
+                    Text(crawl.inviteCode)
+                        .font(.system(size: 36, weight: .bold, design: .monospaced))
+                        .foregroundStyle(PTTheme.amber)
                         .padding()
-                        .background(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                }
-
-                // Share button
-                ShareLink(
-                    item: "Join my pub crawl \"\(crawl.name)\" on Pint Trail! Code: \(crawl.inviteCode)",
-                    subject: Text("Join my pub crawl!"),
-                    message: Text("Join my pub crawl \"\(crawl.name)\" on Pint Trail! Code: \(crawl.inviteCode)")
-                ) {
-                    Label("Share Invite", systemImage: "square.and.arrow.up")
-                        .font(.headline)
                         .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(.orange)
-                        .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                }
+                        .ptCard()
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 16)
+                                .strokeBorder(PTTheme.amber.opacity(0.3), lineWidth: 1)
+                        )
 
-                Spacer()
+                    // QR Code
+                    if let qrImage = generateQRCode(from: deepLink) {
+                        Image(uiImage: qrImage)
+                            .interpolation(.none)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 200, height: 200)
+                            .padding()
+                            .background(PTTheme.cream)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                    }
+
+                    // Share button
+                    ShareLink(
+                        item: "Join my pub crawl \"\(crawl.name)\" on Pint Trail! Code: \(crawl.inviteCode)",
+                        subject: Text("Join my pub crawl!"),
+                        message: Text("Join my pub crawl \"\(crawl.name)\" on Pint Trail! Code: \(crawl.inviteCode)")
+                    ) {
+                        Label("Share Invite", systemImage: "square.and.arrow.up")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(PTTheme.amber)
+                            .foregroundStyle(PTTheme.stout)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                    }
+
+                    Spacer()
+                }
+                .padding()
             }
-            .padding()
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") { dismiss() }
+                        .foregroundStyle(PTTheme.amber)
                 }
             }
         }
+        .preferredColorScheme(.dark)
     }
 
     private func generateQRCode(from string: String) -> UIImage? {

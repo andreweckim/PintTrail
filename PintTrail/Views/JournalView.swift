@@ -17,17 +17,25 @@ struct JournalView: View {
 
     var body: some View {
         NavigationStack {
-            Group {
+            ZStack {
+                PTTheme.background.ignoresSafeArea()
+
                 if entries.isEmpty {
-                    ContentUnavailableView(
-                        "No Beers Yet",
-                        systemImage: "mug",
-                        description: Text("Tap + to log your first beer")
-                    )
+                    VStack(spacing: 16) {
+                        Image(systemName: "mug")
+                            .font(.system(size: 48))
+                            .foregroundStyle(PTTheme.amber.opacity(0.4))
+                        Text("No Beers Yet")
+                            .font(.title2.bold())
+                            .foregroundStyle(PTTheme.cream)
+                        Text("Tap + to log your first beer")
+                            .font(.subheadline)
+                            .foregroundStyle(PTTheme.creamDim)
+                    }
                 } else {
                     ScrollView {
-                        LazyVStack(spacing: 12) {
-                            ForEach(Array(sortedEntries.enumerated()), id: \.element.id) { index, entry in
+                        LazyVStack(spacing: 14) {
+                            ForEach(Array(sortedEntries.enumerated()), id: \.element.id) { _, entry in
                                 NavigationLink(destination: BeerDetailView(entry: entry, totalEntries: entries.count)) {
                                     BeerCard(entry: entry, rank: entry.rankPosition + 1, totalEntries: entries.count)
                                 }
@@ -36,10 +44,14 @@ struct JournalView: View {
                         }
                         .padding(.horizontal)
                         .padding(.top, 8)
+                        .padding(.bottom, 20)
                     }
                 }
             }
             .navigationTitle("Pint Trail")
+            .toolbarColorScheme(.dark, for: .navigationBar)
+            .toolbarBackground(PTTheme.background, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Menu {
@@ -55,11 +67,13 @@ struct JournalView: View {
                         }
                     } label: {
                         Image(systemName: "arrow.up.arrow.down")
+                            .foregroundStyle(PTTheme.amber)
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: { showingAddEntry = true }) {
                         Image(systemName: "plus")
+                            .foregroundStyle(PTTheme.amber)
                     }
                 }
             }
@@ -67,6 +81,7 @@ struct JournalView: View {
                 AddBeerView()
             }
         }
+        .preferredColorScheme(.dark)
     }
 }
 
@@ -77,7 +92,7 @@ struct BeerCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Photo area
+            // Photo
             ZStack(alignment: .topLeading) {
                 if let photoData = entry.photoData,
                    let uiImage = UIImage(data: photoData) {
@@ -86,11 +101,18 @@ struct BeerCard: View {
                         .aspectRatio(contentMode: .fill)
                         .frame(height: 180)
                         .clipped()
+                        .overlay(
+                            LinearGradient(
+                                colors: [.clear, PTTheme.surface.opacity(0.6)],
+                                startPoint: .center,
+                                endPoint: .bottom
+                            )
+                        )
                 } else {
                     Rectangle()
                         .fill(
                             LinearGradient(
-                                colors: [.orange.opacity(0.3), .orange.opacity(0.1)],
+                                colors: [PTTheme.surfaceLight, PTTheme.surface],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )
@@ -98,60 +120,52 @@ struct BeerCard: View {
                         .frame(height: 180)
                         .overlay {
                             Image(systemName: "mug")
-                                .font(.system(size: 40))
-                                .foregroundStyle(.orange.opacity(0.5))
+                                .font(.system(size: 36))
+                                .foregroundStyle(PTTheme.amber.opacity(0.25))
                         }
                 }
 
-                // Rank badge
-                Text("#\(rank)")
-                    .font(.caption.bold())
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(.ultraThinMaterial)
-                    .clipShape(Capsule())
+                PTRankBadge(rank: rank)
                     .padding(10)
             }
 
-            // Info area
+            // Info
             VStack(alignment: .leading, spacing: 6) {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(entry.name)
                             .font(.headline)
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(PTTheme.cream)
                             .lineLimit(1)
 
                         if !entry.brewery.isEmpty {
                             Text(entry.brewery)
                                 .font(.subheadline)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(PTTheme.creamDim)
                                 .lineLimit(1)
                         }
                     }
 
                     Spacer()
 
-                    // Score
-                    Text(entry.formattedScore(outOf: totalEntries))
-                        .font(.title2.bold())
-                        .foregroundStyle(.orange)
+                    PTScoreBadge(score: entry.formattedScore(outOf: totalEntries))
                 }
 
-                HStack(spacing: 12) {
+                HStack(spacing: 10) {
                     if !entry.style.isEmpty {
                         Text(entry.style)
                             .font(.caption)
+                            .foregroundStyle(PTTheme.amber)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 3)
-                            .background(.secondary.opacity(0.12))
+                            .background(PTTheme.amberDim)
                             .clipShape(Capsule())
                     }
 
                     if let venue = entry.venueName {
                         Label(venue, systemImage: "mappin")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(PTTheme.creamDim)
                             .lineLimit(1)
                     }
 
@@ -159,13 +173,12 @@ struct BeerCard: View {
 
                     Text(entry.createdAt, format: .dateTime.month(.abbreviated).day())
                         .font(.caption)
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(PTTheme.creamDim.opacity(0.5))
                 }
             }
             .padding(12)
         }
-        .background(.secondary.opacity(0.08))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .ptCard()
     }
 }
 

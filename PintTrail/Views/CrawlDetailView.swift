@@ -12,67 +12,109 @@ struct CrawlDetailView: View {
     }
 
     var body: some View {
-        List {
-            Section {
-                HStack(spacing: 20) {
-                    StatBubble(value: "\(crawl.beerCount)", label: "Beers")
-                    StatBubble(value: "\(crawl.venueCount)", label: "Venues")
-                    StatBubble(value: formatDuration(), label: "Duration")
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 8)
-                .listRowBackground(Color.clear)
-            }
+        ZStack {
+            PTTheme.background.ignoresSafeArea()
 
-            Section {
-                Button {
-                    showingCheckIn = true
-                } label: {
-                    Label("Check In a Beer", systemImage: "plus.circle.fill")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 8)
-                }
-                .tint(.orange)
-            }
+            ScrollView {
+                VStack(spacing: 16) {
+                    // Stats
+                    HStack(spacing: 0) {
+                        StatBubble(value: "\(crawl.beerCount)", label: "Beers")
+                        StatBubble(value: "\(crawl.venueCount)", label: "Venues")
+                        StatBubble(value: formatDuration(), label: "Duration")
+                    }
+                    .padding()
+                    .ptCard()
 
-            if !crawl.venues.isEmpty {
-                Section("Stops") {
-                    ForEach(crawl.venues, id: \.self) { venue in
-                        let venueCheckIns = sortedCheckIns.filter { $0.venueName == venue }
-                        HStack {
-                            Label(venue, systemImage: "mappin.circle.fill")
-                            Spacer()
-                            Text("\(venueCheckIns.count) beers")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+                    // Check in button
+                    Button {
+                        showingCheckIn = true
+                    } label: {
+                        Label("Check In a Beer", systemImage: "plus.circle.fill")
+                            .font(.headline)
+                            .foregroundStyle(PTTheme.stout)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(PTTheme.amber)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                    }
+
+                    // Stops
+                    if !crawl.venues.isEmpty {
+                        VStack(alignment: .leading, spacing: 10) {
+                            PTSectionHeader(title: "Stops")
+                                .padding(.leading, 4)
+
+                            VStack(spacing: 0) {
+                                ForEach(Array(crawl.venues.enumerated()), id: \.element) { index, venue in
+                                    let venueCheckIns = sortedCheckIns.filter { $0.venueName == venue }
+                                    HStack {
+                                        Label(venue, systemImage: "mappin.circle.fill")
+                                            .foregroundStyle(PTTheme.cream)
+                                        Spacer()
+                                        Text("\(venueCheckIns.count) beers")
+                                            .font(.caption)
+                                            .foregroundStyle(PTTheme.creamDim)
+                                    }
+                                    .padding()
+
+                                    if index < crawl.venues.count - 1 {
+                                        Divider().overlay(PTTheme.surfaceLight)
+                                    }
+                                }
+                            }
+                            .ptCard()
+                        }
+                    }
+
+                    // Check-ins
+                    if !sortedCheckIns.isEmpty {
+                        VStack(alignment: .leading, spacing: 10) {
+                            PTSectionHeader(title: "Check-ins")
+                                .padding(.leading, 4)
+
+                            VStack(spacing: 0) {
+                                ForEach(Array(sortedCheckIns.enumerated()), id: \.element.id) { index, checkIn in
+                                    CheckInRow(checkIn: checkIn)
+                                        .padding()
+
+                                    if index < sortedCheckIns.count - 1 {
+                                        Divider().overlay(PTTheme.surfaceLight)
+                                    }
+                                }
+                            }
+                            .ptCard()
+                        }
+                    }
+
+                    // End crawl
+                    if crawl.isActive {
+                        Button {
+                            crawl.isActive = false
+                        } label: {
+                            Text("End Crawl")
+                                .font(.subheadline)
+                                .foregroundStyle(.red)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(PTTheme.surface)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
                         }
                     }
                 }
-            }
-
-            if !sortedCheckIns.isEmpty {
-                Section("Check-ins") {
-                    ForEach(sortedCheckIns) { checkIn in
-                        CheckInRow(checkIn: checkIn)
-                    }
-                    .onDelete(perform: deleteCheckIns)
-                }
-            }
-
-            Section {
-                Button("End Crawl", role: .destructive) {
-                    crawl.isActive = false
-                }
+                .padding()
             }
         }
         .navigationTitle(crawl.name)
+        .toolbarColorScheme(.dark, for: .navigationBar)
+        .toolbarBackground(PTTheme.background, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     showingInvite = true
                 } label: {
                     Image(systemName: "square.and.arrow.up")
+                        .foregroundStyle(PTTheme.amber)
                 }
             }
         }
@@ -94,12 +136,6 @@ struct CrawlDetailView: View {
         }
         return "\(minutes / 60)h \(minutes % 60)m"
     }
-
-    private func deleteCheckIns(at offsets: IndexSet) {
-        for index in offsets {
-            modelContext.delete(sortedCheckIns[index])
-        }
-    }
 }
 
 struct StatBubble: View {
@@ -110,10 +146,10 @@ struct StatBubble: View {
         VStack(spacing: 4) {
             Text(value)
                 .font(.title2.bold())
-                .foregroundStyle(.orange)
+                .foregroundStyle(PTTheme.amber)
             Text(label)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(PTTheme.creamDim)
         }
         .frame(maxWidth: .infinity)
     }
@@ -133,39 +169,39 @@ struct CheckInRow: View {
                     .clipShape(RoundedRectangle(cornerRadius: 6))
             } else {
                 RoundedRectangle(cornerRadius: 6)
-                    .fill(.secondary.opacity(0.2))
+                    .fill(PTTheme.surfaceLight)
                     .frame(width: 44, height: 44)
                     .overlay {
                         Image(systemName: "mug")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(PTTheme.amber.opacity(0.5))
                     }
             }
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(checkIn.beerName)
                     .font(.subheadline.bold())
+                    .foregroundStyle(PTTheme.cream)
 
                 if !checkIn.brewery.isEmpty {
                     Text(checkIn.brewery)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(PTTheme.creamDim)
                 }
 
                 HStack(spacing: 4) {
                     if let venue = checkIn.venueName {
                         Text(venue)
                             .font(.caption2)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(PTTheme.creamDim)
                     }
                     Text(checkIn.timestamp, format: .dateTime.hour().minute())
                         .font(.caption2)
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(PTTheme.creamDim.opacity(0.5))
                 }
             }
 
             Spacer()
         }
-        .padding(.vertical, 2)
     }
 }

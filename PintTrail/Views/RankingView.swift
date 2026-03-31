@@ -13,20 +13,20 @@ struct RankingView: View {
         VStack(spacing: 24) {
             Text("Which do you prefer?")
                 .font(.title2.bold())
+                .foregroundStyle(PTTheme.cream)
                 .padding(.top)
 
             // Progress
             HStack(spacing: 4) {
                 ForEach(0..<totalComparisons, id: \.self) { i in
                     RoundedRectangle(cornerRadius: 2)
-                        .fill(i < comparisonsCompleted ? Color.orange : Color.secondary.opacity(0.3))
+                        .fill(i < comparisonsCompleted ? PTTheme.amber : PTTheme.surfaceLight)
                         .frame(height: 4)
                 }
             }
             .padding(.horizontal)
 
             HStack(spacing: 16) {
-                // New beer
                 ComparisonCard(
                     name: newEntry.name,
                     brewery: newEntry.brewery,
@@ -38,9 +38,8 @@ struct RankingView: View {
 
                 Text("vs")
                     .font(.headline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(PTTheme.creamDim)
 
-                // Existing beer
                 ComparisonCard(
                     name: comparisonEntry.name,
                     brewery: comparisonEntry.brewery,
@@ -56,7 +55,7 @@ struct RankingView: View {
                 onSkip()
             }
             .font(.subheadline)
-            .foregroundStyle(.secondary)
+            .foregroundStyle(PTTheme.creamDim)
             .padding(.bottom)
         }
     }
@@ -80,24 +79,25 @@ struct ComparisonCard: View {
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                 } else {
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(.secondary.opacity(0.15))
+                        .fill(PTTheme.surfaceLight)
                         .frame(height: 140)
                         .overlay {
                             Image(systemName: "mug")
                                 .font(.largeTitle)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(PTTheme.amber.opacity(0.3))
                         }
                 }
 
                 Text(name)
                     .font(.subheadline.bold())
+                    .foregroundStyle(PTTheme.cream)
                     .lineLimit(2)
                     .multilineTextAlignment(.center)
 
                 if !brewery.isEmpty {
                     Text(brewery)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(PTTheme.creamDim)
                         .lineLimit(1)
                 }
 
@@ -106,15 +106,18 @@ struct ComparisonCard: View {
                         .font(.caption2.bold())
                         .padding(.horizontal, 8)
                         .padding(.vertical, 2)
-                        .background(.orange.opacity(0.2))
-                        .foregroundStyle(.orange)
+                        .background(PTTheme.amberDim)
+                        .foregroundStyle(PTTheme.amber)
                         .clipShape(Capsule())
                 }
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(.secondary.opacity(0.08))
-            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .ptCard()
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .strokeBorder(PTTheme.amber.opacity(0.15), lineWidth: 1)
+            )
         }
         .buttonStyle(.plain)
     }

@@ -25,6 +25,7 @@
 		9435F611C7AA90DA9DEEDABA /* RankingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FC6B773AAAF05C8414C748 /* RankingEngine.swift */; };
 		971870BCD8BB687BC912C311 /* CrawlDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C990CB70D55012CFABB9634 /* CrawlDetailView.swift */; };
 		988AAE1780D5A85D3E1344AC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E017F7F7650B7C2FF76EA27 /* SettingsView.swift */; };
+		A60BB3A2C35FE3904A17E6FF /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03754AC962EEECD4DDD5BE0F /* Theme.swift */; };
 		D4EF2418BC8C88E07C0FAE54 /* BarcodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764C64A5C6455E23999E492C /* BarcodeScannerView.swift */; };
 		E78974C6B38FA771E8FB5F09 /* CreateCrawlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA22A97F901723F8E7BE8C /* CreateCrawlView.swift */; };
 		E8F64163FF18EDE47242AAFB /* BarcodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A849B81943351A538DA2F48C /* BarcodeService.swift */; };
@@ -33,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		01DA22A97F901723F8E7BE8C /* CreateCrawlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCrawlView.swift; sourceTree = "<group>"; };
+		03754AC962EEECD4DDD5BE0F /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		1663AD66EA6F46B5C17AEE79 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1ECFDE8B3BA077C5C20718D6 /* CrawlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrawlsView.swift; sourceTree = "<group>"; };
 		21BB39598E5B30D4FF72AEA1 /* CrawlCheckInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrawlCheckInView.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				7D0C943165A320A55F95DDB0 /* ContentView.swift */,
 				5CF5BCBC1F8F341C2C91AE02 /* Info.plist */,
 				7C8A48AC1F1EC6CE29F1DA74 /* PintTrailApp.swift */,
+				03754AC962EEECD4DDD5BE0F /* Theme.swift */,
 				67676FAC6A83A5195EB28659 /* Models */,
 				FCF22EE677DE42BFEF2BED39 /* Services */,
 				E9B03E0B5729D151CC2796EA /* Views */,
@@ -129,7 +132,7 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		"TEMP_3011A012-CDEB-441A-ACB0-212C6295398D" /* Preview Content */ = {
+		"TEMP_83B64893-0B39-497D-8070-1175C1423576" /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -224,6 +227,7 @@
 				9435F611C7AA90DA9DEEDABA /* RankingEngine.swift in Sources */,
 				28C0D8F73C4D4FAFA709FED3 /* RankingView.swift in Sources */,
 				988AAE1780D5A85D3E1344AC /* SettingsView.swift in Sources */,
+				A60BB3A2C35FE3904A17E6FF /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

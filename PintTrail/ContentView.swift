@@ -34,6 +34,8 @@ struct ContentView: View {
                 }
                 .tag(Tab.settings)
         }
+        .tint(PTTheme.amber)
+        .preferredColorScheme(.dark)
     }
 }
 

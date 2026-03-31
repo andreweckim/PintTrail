@@ -18,59 +18,95 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                Section("Your Stats") {
-                    StatRow(label: "Beers Logged", value: "\(entries.count)")
-                    StatRow(label: "Unique Breweries", value: "\(uniqueBreweries)")
-                    StatRow(label: "Venues Visited", value: "\(uniqueVenues)")
-                }
+            ZStack {
+                PTTheme.background.ignoresSafeArea()
 
-                if let top = topBeer, entries.count > 1 {
-                    Section("Top Beer") {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(top.name)
-                                    .font(.headline)
-                                if !top.brewery.isEmpty {
-                                    Text(top.brewery)
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                }
+                ScrollView {
+                    VStack(spacing: 16) {
+                        // Stats
+                        VStack(spacing: 0) {
+                            PTSectionHeader(title: "Your Stats")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.bottom, 12)
+
+                            VStack(spacing: 0) {
+                                SettingsStatRow(label: "Beers Logged", value: "\(entries.count)")
+                                Divider().overlay(PTTheme.surfaceLight)
+                                SettingsStatRow(label: "Unique Breweries", value: "\(uniqueBreweries)")
+                                Divider().overlay(PTTheme.surfaceLight)
+                                SettingsStatRow(label: "Venues Visited", value: "\(uniqueVenues)")
                             }
-                            Spacer()
-                            Text(top.formattedScore(outOf: entries.count))
-                                .font(.title2.bold())
-                                .foregroundStyle(.orange)
+                            .ptCard()
+                        }
+
+                        if let top = topBeer, entries.count > 1 {
+                            VStack(spacing: 0) {
+                                PTSectionHeader(title: "Top Beer")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.bottom, 12)
+
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(top.name)
+                                            .font(.headline)
+                                            .foregroundStyle(PTTheme.cream)
+                                        if !top.brewery.isEmpty {
+                                            Text(top.brewery)
+                                                .font(.caption)
+                                                .foregroundStyle(PTTheme.creamDim)
+                                        }
+                                    }
+                                    Spacer()
+                                    PTScoreBadge(score: top.formattedScore(outOf: entries.count))
+                                }
+                                .padding()
+                                .ptCard()
+                            }
+                        }
+
+                        // About
+                        VStack(spacing: 0) {
+                            PTSectionHeader(title: "About")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.bottom, 12)
+
+                            HStack {
+                                Text("Version")
+                                    .foregroundStyle(PTTheme.cream)
+                                Spacer()
+                                Text("1.0.0")
+                                    .foregroundStyle(PTTheme.creamDim)
+                            }
+                            .padding()
+                            .ptCard()
                         }
                     }
-                }
-
-                Section("About") {
-                    HStack {
-                        Text("Version")
-                        Spacer()
-                        Text("1.0.0")
-                            .foregroundStyle(.secondary)
-                    }
+                    .padding()
                 }
             }
             .navigationTitle("Settings")
+            .toolbarColorScheme(.dark, for: .navigationBar)
+            .toolbarBackground(PTTheme.background, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
         }
+        .preferredColorScheme(.dark)
     }
 }
 
-struct StatRow: View {
+struct SettingsStatRow: View {
     let label: String
     let value: String
 
     var body: some View {
         HStack {
             Text(label)
+                .foregroundStyle(PTTheme.cream)
             Spacer()
             Text(value)
                 .fontWeight(.semibold)
-                .foregroundStyle(.orange)
+                .foregroundStyle(PTTheme.amber)
         }
+        .padding()
     }
 }
 
