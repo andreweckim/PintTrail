@@ -12,8 +12,20 @@ struct SettingsView: View {
         Set(entries.compactMap(\.venueName)).count
     }
 
+    private var showScores: Bool {
+        entries.count >= RankingEngine.scoreThreshold
+    }
+
     private var topBeer: BeerEntry? {
-        entries.min(by: { $0.rankPosition < $1.rankPosition })
+        entries.max(by: { $0.eloRating < $1.eloRating })
+    }
+
+    private var eloMin: Double {
+        entries.map(\.eloRating).min() ?? 1500
+    }
+
+    private var eloMax: Double {
+        entries.map(\.eloRating).max() ?? 1500
     }
 
     var body: some View {
@@ -57,7 +69,9 @@ struct SettingsView: View {
                                         }
                                     }
                                     Spacer()
-                                    PTScoreBadge(score: top.formattedScore(outOf: entries.count))
+                                    if showScores {
+                                        PTScoreBadge(score: top.formattedDisplayScore(min: eloMin, max: eloMax))
+                                    }
                                 }
                                 .padding()
                                 .ptCard()

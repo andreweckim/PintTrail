@@ -5,7 +5,7 @@ import PhotosUI
 struct AddBeerView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Query(sort: \BeerEntry.rankPosition) private var existingEntries: [BeerEntry]
+    @Query(sort: \BeerEntry.eloRating, order: .reverse) private var existingEntries: [BeerEntry]
 
     @State private var name = ""
     @State private var brewery = ""
@@ -191,7 +191,6 @@ struct AddBeerView: View {
             name: name,
             brewery: brewery,
             style: style,
-            rankPosition: 0,
             notes: notes,
             photoData: photoData,
             latitude: useLocation ? locationManager.currentLocation?.coordinate.latitude : nil,
@@ -206,12 +205,8 @@ struct AddBeerView: View {
         }
 
         pendingEntry = entry
-        rankingEngine.startRanking(newEntry: entry, existingEntries: existingEntries) { position in
-            for existing in existingEntries where existing.rankPosition >= position {
-                existing.rankPosition += 1
-            }
-            entry.rankPosition = position
-            modelContext.insert(entry)
+        modelContext.insert(entry)
+        rankingEngine.startRanking(newEntry: entry, existingEntries: existingEntries) {
             dismiss()
         }
     }

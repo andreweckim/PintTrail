@@ -3,7 +3,11 @@ import MapKit
 
 struct BeerDetailView: View {
     let entry: BeerEntry
+    let rank: Int
     let totalEntries: Int
+    let showScore: Bool
+    let eloMin: Double
+    let eloMax: Double
 
     var body: some View {
         ZStack {
@@ -37,8 +41,10 @@ struct BeerDetailView: View {
                         Spacer()
 
                         VStack(spacing: 2) {
-                            PTScoreBadge(score: entry.formattedScore(outOf: totalEntries), size: .largeTitle)
-                            Text("#\(entry.rankPosition + 1) of \(totalEntries)")
+                            if showScore {
+                                PTScoreBadge(score: entry.formattedDisplayScore(min: eloMin, max: eloMax), size: .largeTitle)
+                            }
+                            Text("#\(rank) of \(totalEntries)")
                                 .font(.caption)
                                 .foregroundStyle(PTTheme.creamDim)
                         }

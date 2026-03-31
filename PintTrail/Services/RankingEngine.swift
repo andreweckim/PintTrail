@@ -10,77 +10,125 @@ final class RankingEngine {
     var comparisonsCompleted = 0
     var totalComparisons = 0
 
-    private var rankedEntries: [BeerEntry] = []
-    private var low = 0
-    private var high = 0
+    private var candidates: [BeerEntry] = []
+    private var candidateIndex = 0
     private var newEntry: BeerEntry?
-    private var completion: ((Int) -> Void)?
+    private var completion: (() -> Void)?
 
-    func startRanking(newEntry: BeerEntry, existingEntries: [BeerEntry], completion: @escaping (Int) -> Void) {
+    /// K-factor: how much a single comparison moves ratings.
+    /// Higher = ratings shift faster (good for small datasets).
+    private let kFactor: Double = 32.0
+
+    /// Minimum number of beers before showing scores (show rank only before this).
+    static let scoreThreshold = 5
+
+    // MARK: - Elo math
+
+    /// Expected score (probability of winning) for ratingA vs ratingB.
+    private func expectedScore(ratingA: Double, ratingB: Double) -> Double {
+        1.0 / (1.0 + pow(10.0, (ratingB - ratingA) / 400.0))
+    }
+
+    /// Update both ratings after a comparison. Returns (newRatingA, newRatingB).
+    private func updatedRatings(winner: Double, loser: Double) -> (Double, Double) {
+        let expectedWin = expectedScore(ratingA: winner, ratingB: loser)
+        let expectedLose = 1.0 - expectedWin
+
+        let newWinner = winner + kFactor * (1.0 - expectedWin)
+        let newLoser = loser + kFactor * (0.0 - expectedLose)
+
+        return (newWinner, newLoser)
+    }
+
+    // MARK: - Ranking flow
+
+    func startRanking(newEntry: BeerEntry, existingEntries: [BeerEntry], completion: @escaping () -> Void) {
         self.newEntry = newEntry
         self.newBeerName = newEntry.name
         self.completion = completion
 
-        // Sort existing by rankPosition
-        self.rankedEntries = existingEntries.sorted { $0.rankPosition < $1.rankPosition }
-
-        guard !rankedEntries.isEmpty else {
-            completion(0)
+        guard !existingEntries.isEmpty else {
+            completion()
             return
         }
 
-        low = 0
-        high = rankedEntries.count
-        totalComparisons = max(1, Int(ceil(log2(Double(rankedEntries.count + 1)))))
+        // Pick comparison candidates: use binary search-style selection.
+        // Sort by Elo, then pick log2(n) spread across the range.
+        let sorted = existingEntries.sorted { $0.eloRating > $1.eloRating }
+        let count = sorted.count
+
+        if count <= 5 {
+            candidates = sorted
+        } else {
+            // Pick ~log2(n)+1 evenly spaced candidates
+            let numComparisons = min(count, Int(ceil(log2(Double(count)))) + 1)
+            var picked: [BeerEntry] = []
+            for i in 0..<numComparisons {
+                let index = i * (count - 1) / (numComparisons - 1)
+                picked.append(sorted[index])
+            }
+            candidates = picked
+        }
+
+        totalComparisons = candidates.count
         comparisonsCompleted = 0
+        candidateIndex = 0
         isRanking = true
 
         presentNext()
     }
 
     func chooseNew() {
-        // New beer is better than current comparison — search higher (lower index)
-        high = currentIndex
+        guard let newEntry, candidateIndex < candidates.count else { return }
+        let opponent = candidates[candidateIndex]
+
+        // New beer wins
+        let (newRating, opponentRating) = updatedRatings(winner: newEntry.eloRating, loser: opponent.eloRating)
+        newEntry.eloRating = newRating
+        opponent.eloRating = opponentRating
+        newEntry.comparisonCount += 1
+        opponent.comparisonCount += 1
+
         comparisonsCompleted += 1
+        candidateIndex += 1
         presentNext()
     }
 
     func chooseExisting() {
-        // Existing beer is better — search lower (higher index)
-        low = currentIndex + 1
+        guard let newEntry, candidateIndex < candidates.count else { return }
+        let opponent = candidates[candidateIndex]
+
+        // Existing beer wins
+        let (opponentRating, newRating) = updatedRatings(winner: opponent.eloRating, loser: newEntry.eloRating)
+        newEntry.eloRating = newRating
+        opponent.eloRating = opponentRating
+        newEntry.comparisonCount += 1
+        opponent.comparisonCount += 1
+
         comparisonsCompleted += 1
+        candidateIndex += 1
         presentNext()
     }
 
     func skip() {
-        // Place roughly in the middle of remaining range
-        let position = (low + high) / 2
-        finalize(at: position)
-    }
-
-    private var currentIndex: Int {
-        (low + high) / 2
+        // No rating change, move to next
+        comparisonsCompleted += 1
+        candidateIndex += 1
+        presentNext()
     }
 
     private func presentNext() {
-        if low >= high {
-            finalize(at: low)
+        if candidateIndex >= candidates.count {
+            finalize()
             return
         }
-
-        let mid = currentIndex
-        guard mid < rankedEntries.count else {
-            finalize(at: rankedEntries.count)
-            return
-        }
-
-        currentComparison = rankedEntries[mid]
+        currentComparison = candidates[candidateIndex]
     }
 
-    private func finalize(at position: Int) {
+    private func finalize() {
         isRanking = false
         currentComparison = nil
-        completion?(position)
+        completion?()
         completion = nil
     }
 }

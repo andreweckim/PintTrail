@@ -3,7 +3,7 @@ import SwiftData
 
 struct JournalView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query(sort: \BeerEntry.rankPosition) private var entries: [BeerEntry]
+    @Query(sort: \BeerEntry.eloRating, order: .reverse) private var entries: [BeerEntry]
     @State private var showingAddEntry = false
     @State private var sortByRank = true
 
@@ -13,6 +13,18 @@ struct JournalView: View {
         } else {
             return entries.sorted { $0.createdAt > $1.createdAt }
         }
+    }
+
+    private var showScores: Bool {
+        entries.count >= RankingEngine.scoreThreshold
+    }
+
+    private var eloMin: Double {
+        entries.map(\.eloRating).min() ?? 1500
+    }
+
+    private var eloMax: Double {
+        entries.map(\.eloRating).max() ?? 1500
     }
 
     var body: some View {
@@ -64,9 +76,10 @@ struct JournalView: View {
                             }
                             .padding(.horizontal, 4)
 
-                            ForEach(Array(sortedEntries.enumerated()), id: \.element.id) { _, entry in
-                                NavigationLink(destination: BeerDetailView(entry: entry, totalEntries: entries.count)) {
-                                    BeerCard(entry: entry, rank: entry.rankPosition + 1, totalEntries: entries.count)
+                            ForEach(Array(sortedEntries.enumerated()), id: \.element.id) { index, entry in
+                                let rank = (entries.firstIndex(where: { $0.id == entry.id }) ?? index) + 1
+                                NavigationLink(destination: BeerDetailView(entry: entry, rank: rank, totalEntries: entries.count, showScore: showScores, eloMin: eloMin, eloMax: eloMax)) {
+                                    BeerCard(entry: entry, rank: rank, totalEntries: entries.count, showScore: showScores, eloMin: eloMin, eloMax: eloMax)
                                 }
                                 .buttonStyle(.plain)
                             }
@@ -90,6 +103,9 @@ struct BeerCard: View {
     let entry: BeerEntry
     let rank: Int
     let totalEntries: Int
+    let showScore: Bool
+    let eloMin: Double
+    let eloMax: Double
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -147,7 +163,9 @@ struct BeerCard: View {
 
                     Spacer()
 
-                    PTScoreBadge(score: entry.formattedScore(outOf: totalEntries))
+                    if showScore {
+                        PTScoreBadge(score: entry.formattedDisplayScore(min: eloMin, max: eloMax))
+                    }
                 }
 
                 HStack(spacing: 10) {
