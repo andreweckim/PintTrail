@@ -18,6 +18,7 @@ struct AddBeerView: View {
 
     @State private var rankingEngine = RankingEngine()
     @State private var pendingEntry: BeerEntry?
+    @State private var rankingDone = false
 
     @State private var showingScanner = false
     @State private var isLookingUp = false
@@ -138,6 +139,12 @@ struct AddBeerView: View {
             .onAppear {
                 locationManager.requestPermission()
             }
+            .onChange(of: rankingDone) { _, done in
+                if done, let entry = pendingEntry {
+                    modelContext.insert(entry)
+                    dismiss()
+                }
+            }
             .fullScreenCover(isPresented: $showingScanner) {
                 ZStack(alignment: .topTrailing) {
                     BarcodeScannerView { barcode in
@@ -207,8 +214,7 @@ struct AddBeerView: View {
         pendingEntry = entry
         let entriesToCompare = Array(existingEntries)
         rankingEngine.startRanking(newEntry: entry, existingEntries: entriesToCompare) {
-            modelContext.insert(entry)
-            dismiss()
+            rankingDone = true
         }
     }
 }

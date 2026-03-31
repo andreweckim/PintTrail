@@ -7,6 +7,6 @@ struct PintTrailApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: [BeerEntry.self, PubCrawl.self, CrawlCheckIn.self])
+        .modelContainer(for: [BeerEntry.self, PubCrawl.self, CrawlCheckIn.self], isAutosaveEnabled: true)
     }
 }
