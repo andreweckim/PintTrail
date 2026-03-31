@@ -12,9 +12,8 @@ struct SettingsView: View {
         Set(entries.compactMap(\.venueName)).count
     }
 
-    private var averageRating: Double {
-        guard !entries.isEmpty else { return 0 }
-        return Double(entries.map(\.rating).reduce(0, +)) / Double(entries.count)
+    private var topBeer: BeerEntry? {
+        entries.min(by: { $0.rankPosition < $1.rankPosition })
     }
 
     var body: some View {
@@ -24,7 +23,26 @@ struct SettingsView: View {
                     StatRow(label: "Beers Logged", value: "\(entries.count)")
                     StatRow(label: "Unique Breweries", value: "\(uniqueBreweries)")
                     StatRow(label: "Venues Visited", value: "\(uniqueVenues)")
-                    StatRow(label: "Average Rating", value: String(format: "%.1f", averageRating))
+                }
+
+                if let top = topBeer, entries.count > 1 {
+                    Section("Top Beer") {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(top.name)
+                                    .font(.headline)
+                                if !top.brewery.isEmpty {
+                                    Text(top.brewery)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                            Spacer()
+                            Text(top.formattedScore(outOf: entries.count))
+                                .font(.title2.bold())
+                                .foregroundStyle(.orange)
+                        }
+                    }
                 }
 
                 Section("About") {

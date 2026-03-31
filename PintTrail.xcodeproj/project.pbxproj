@@ -11,6 +11,7 @@
 		088D894ABA5840AE7EAA4F85 /* MapTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6AF703FFA7410B6F53E074C /* MapTabView.swift */; };
 		1058011E5B55C8232AA18893 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0C943165A320A55F95DDB0 /* ContentView.swift */; };
 		10C1F2A2F5D977DA48FAF6D2 /* InviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0F1B774B376999E2B3130 /* InviteView.swift */; };
+		28C0D8F73C4D4FAFA709FED3 /* RankingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5F223F2A1DFEA274CF59CA /* RankingView.swift */; };
 		2B90E9B49015BFC13A77355A /* PubCrawl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B30BBD2F47BAE9DEB353868 /* PubCrawl.swift */; };
 		2D37651DCB9E9C597EDA3EEC /* CrawlCheckInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BB39598E5B30D4FF72AEA1 /* CrawlCheckInView.swift */; };
 		2DEDB6281324E2B0AD21929B /* PintTrailApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A48AC1F1EC6CE29F1DA74 /* PintTrailApp.swift */; };
@@ -21,6 +22,7 @@
 		65F78C7885AC096D3081A9C4 /* JournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731C882AD6B9F3CBA728CFFF /* JournalView.swift */; };
 		6D8A23D084B74C4CCDAE8848 /* BeerEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE432720796048CECF1BB67 /* BeerEntry.swift */; };
 		7B6A84BE2C355C99A9B75033 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1663AD66EA6F46B5C17AEE79 /* Assets.xcassets */; };
+		9435F611C7AA90DA9DEEDABA /* RankingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FC6B773AAAF05C8414C748 /* RankingEngine.swift */; };
 		971870BCD8BB687BC912C311 /* CrawlDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C990CB70D55012CFABB9634 /* CrawlDetailView.swift */; };
 		988AAE1780D5A85D3E1344AC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E017F7F7650B7C2FF76EA27 /* SettingsView.swift */; };
 		E78974C6B38FA771E8FB5F09 /* CreateCrawlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA22A97F901723F8E7BE8C /* CreateCrawlView.swift */; };
@@ -35,6 +37,7 @@
 		22A6982C86619EBF5C8178A3 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		22D3FDA845E57842F2653EA0 /* AddBeerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBeerView.swift; sourceTree = "<group>"; };
 		2EE432720796048CECF1BB67 /* BeerEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerEntry.swift; sourceTree = "<group>"; };
+		3C5F223F2A1DFEA274CF59CA /* RankingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingView.swift; sourceTree = "<group>"; };
 		4AD0F1B774B376999E2B3130 /* InviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteView.swift; sourceTree = "<group>"; };
 		4B72B28D0F01738F5AC78497 /* CrawlRecapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrawlRecapView.swift; sourceTree = "<group>"; };
 		4C990CB70D55012CFABB9634 /* CrawlDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrawlDetailView.swift; sourceTree = "<group>"; };
@@ -46,6 +49,7 @@
 		7D0C943165A320A55F95DDB0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7E017F7F7650B7C2FF76EA27 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8CF37755F02D94D0E0193E8C /* BeerDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerDetailView.swift; sourceTree = "<group>"; };
+		D0FC6B773AAAF05C8414C748 /* RankingEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingEngine.swift; sourceTree = "<group>"; };
 		F6AF703FFA7410B6F53E074C /* MapTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTabView.swift; sourceTree = "<group>"; };
 		FFE132DA14C83F8CAF342CBD /* CrawlCheckIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrawlCheckIn.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -104,6 +108,7 @@
 				4AD0F1B774B376999E2B3130 /* InviteView.swift */,
 				731C882AD6B9F3CBA728CFFF /* JournalView.swift */,
 				F6AF703FFA7410B6F53E074C /* MapTabView.swift */,
+				3C5F223F2A1DFEA274CF59CA /* RankingView.swift */,
 				7E017F7F7650B7C2FF76EA27 /* SettingsView.swift */,
 			);
 			path = Views;
@@ -113,11 +118,12 @@
 			isa = PBXGroup;
 			children = (
 				22A6982C86619EBF5C8178A3 /* LocationManager.swift */,
+				D0FC6B773AAAF05C8414C748 /* RankingEngine.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
 		};
-		"TEMP_ECFED804-F577-4471-8708-4C35949134C0" /* Preview Content */ = {
+		"TEMP_505326F7-A624-4248-9FC1-76C131C58EBB" /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -207,6 +213,8 @@
 				088D894ABA5840AE7EAA4F85 /* MapTabView.swift in Sources */,
 				2DEDB6281324E2B0AD21929B /* PintTrailApp.swift in Sources */,
 				2B90E9B49015BFC13A77355A /* PubCrawl.swift in Sources */,
+				9435F611C7AA90DA9DEEDABA /* RankingEngine.swift in Sources */,
+				28C0D8F73C4D4FAFA709FED3 /* RankingView.swift in Sources */,
 				988AAE1780D5A85D3E1344AC /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

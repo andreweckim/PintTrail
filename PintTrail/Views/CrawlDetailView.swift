@@ -165,14 +165,6 @@ struct CheckInRow: View {
             }
 
             Spacer()
-
-            HStack(spacing: 1) {
-                ForEach(1...5, id: \.self) { star in
-                    Image(systemName: star <= checkIn.rating ? "star.fill" : "star")
-                        .font(.system(size: 8))
-                        .foregroundStyle(star <= checkIn.rating ? .yellow : .secondary)
-                }
-            }
         }
         .padding(.vertical, 2)
     }

@@ -5,95 +5,100 @@ import PhotosUI
 struct AddBeerView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Query(sort: \BeerEntry.rankPosition) private var existingEntries: [BeerEntry]
 
     @State private var name = ""
     @State private var brewery = ""
     @State private var style = ""
-    @State private var rating = 3
     @State private var notes = ""
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var photoData: Data?
     @State private var locationManager = LocationManager()
     @State private var useLocation = true
 
+    @State private var rankingEngine = RankingEngine()
+    @State private var pendingEntry: BeerEntry?
+
     var body: some View {
         NavigationStack {
-            Form {
-                Section("Beer Info") {
-                    TextField("Beer Name", text: $name)
-                    TextField("Brewery", text: $brewery)
-                    TextField("Style (e.g. IPA, Stout)", text: $style)
-                }
+            ZStack {
+                Form {
+                    Section("Beer Info") {
+                        TextField("Beer Name", text: $name)
+                        TextField("Brewery", text: $brewery)
+                        TextField("Style (e.g. IPA, Stout)", text: $style)
+                    }
 
-                Section("Rating") {
-                    HStack {
-                        ForEach(1...5, id: \.self) { star in
-                            Button {
-                                rating = star
-                            } label: {
-                                Image(systemName: star <= rating ? "star.fill" : "star")
-                                    .font(.title2)
-                                    .foregroundStyle(star <= rating ? .yellow : .secondary)
+                    Section("Photo") {
+                        PhotosPicker(selection: $selectedPhoto, matching: .images) {
+                            if let photoData, let uiImage = UIImage(data: photoData) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(height: 200)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                            } else {
+                                Label("Add Photo", systemImage: "camera")
                             }
-                            .buttonStyle(.plain)
                         }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.vertical, 4)
-                }
-
-                Section("Photo") {
-                    PhotosPicker(selection: $selectedPhoto, matching: .images) {
-                        if let photoData, let uiImage = UIImage(data: photoData) {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(height: 200)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                        } else {
-                            Label("Add Photo", systemImage: "camera")
-                        }
-                    }
-                    .onChange(of: selectedPhoto) { _, newValue in
-                        Task {
-                            if let data = try? await newValue?.loadTransferable(type: Data.self) {
-                                photoData = data
+                        .onChange(of: selectedPhoto) { _, newValue in
+                            Task {
+                                if let data = try? await newValue?.loadTransferable(type: Data.self) {
+                                    photoData = data
+                                }
                             }
                         }
                     }
-                }
 
-                Section("Notes") {
-                    TextField("Tasting notes...", text: $notes, axis: .vertical)
-                        .lineLimit(3...6)
-                }
+                    Section("Notes") {
+                        TextField("Tasting notes...", text: $notes, axis: .vertical)
+                            .lineLimit(3...6)
+                    }
 
-                Section("Location") {
-                    Toggle("Tag Location", isOn: $useLocation)
+                    Section("Location") {
+                        Toggle("Tag Location", isOn: $useLocation)
 
-                    if useLocation {
-                        if let venue = locationManager.currentVenueName {
-                            Label(venue, systemImage: "mappin.circle.fill")
-                                .foregroundStyle(.secondary)
-                        } else if locationManager.currentLocation != nil {
-                            Label("Location found", systemImage: "location.fill")
-                                .foregroundStyle(.secondary)
-                        } else {
-                            Label("Getting location...", systemImage: "location.slash")
-                                .foregroundStyle(.secondary)
+                        if useLocation {
+                            if let venue = locationManager.currentVenueName {
+                                Label(venue, systemImage: "mappin.circle.fill")
+                                    .foregroundStyle(.secondary)
+                            } else if locationManager.currentLocation != nil {
+                                Label("Location found", systemImage: "location.fill")
+                                    .foregroundStyle(.secondary)
+                            } else {
+                                Label("Getting location...", systemImage: "location.slash")
+                                    .foregroundStyle(.secondary)
+                            }
                         }
                     }
+                }
+                .opacity(rankingEngine.isRanking ? 0.1 : 1.0)
+                .allowsHitTesting(!rankingEngine.isRanking)
+
+                if rankingEngine.isRanking, let pending = pendingEntry, let comparison = rankingEngine.currentComparison {
+                    RankingView(
+                        newEntry: pending,
+                        comparisonEntry: comparison,
+                        comparisonsCompleted: rankingEngine.comparisonsCompleted,
+                        totalComparisons: rankingEngine.totalComparisons,
+                        onChooseNew: { rankingEngine.chooseNew() },
+                        onChooseExisting: { rankingEngine.chooseExisting() },
+                        onSkip: { rankingEngine.skip() }
+                    )
+                    .transition(.opacity)
                 }
             }
+            .animation(.easeInOut, value: rankingEngine.isRanking)
             .navigationTitle("Log a Beer")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
+                        .disabled(rankingEngine.isRanking)
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") { save() }
-                        .disabled(name.isEmpty)
+                    Button("Save") { startSave() }
+                        .disabled(name.isEmpty || rankingEngine.isRanking)
                 }
             }
             .onAppear {
@@ -102,20 +107,36 @@ struct AddBeerView: View {
         }
     }
 
-    private func save() {
+    private func startSave() {
         let entry = BeerEntry(
             name: name,
             brewery: brewery,
             style: style,
-            rating: rating,
+            rankPosition: 0,
             notes: notes,
             photoData: photoData,
             latitude: useLocation ? locationManager.currentLocation?.coordinate.latitude : nil,
             longitude: useLocation ? locationManager.currentLocation?.coordinate.longitude : nil,
             venueName: useLocation ? locationManager.currentVenueName : nil
         )
-        modelContext.insert(entry)
-        dismiss()
+
+        if existingEntries.isEmpty {
+            // First beer — auto rank #1
+            modelContext.insert(entry)
+            dismiss()
+            return
+        }
+
+        pendingEntry = entry
+        rankingEngine.startRanking(newEntry: entry, existingEntries: existingEntries) { position in
+            // Shift existing entries down
+            for existing in existingEntries where existing.rankPosition >= position {
+                existing.rankPosition += 1
+            }
+            entry.rankPosition = position
+            modelContext.insert(entry)
+            dismiss()
+        }
     }
 }
 

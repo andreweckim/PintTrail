@@ -10,7 +10,6 @@ struct CrawlCheckInView: View {
 
     @State private var beerName = ""
     @State private var brewery = ""
-    @State private var rating = 3
     @State private var notes = ""
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var photoData: Data?
@@ -22,23 +21,6 @@ struct CrawlCheckInView: View {
                 Section("What are you drinking?") {
                     TextField("Beer Name", text: $beerName)
                     TextField("Brewery", text: $brewery)
-                }
-
-                Section("Rating") {
-                    HStack {
-                        ForEach(1...5, id: \.self) { star in
-                            Button {
-                                rating = star
-                            } label: {
-                                Image(systemName: star <= rating ? "star.fill" : "star")
-                                    .font(.title2)
-                                    .foregroundStyle(star <= rating ? .yellow : .secondary)
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.vertical, 4)
                 }
 
                 Section("Photo") {
@@ -101,7 +83,6 @@ struct CrawlCheckInView: View {
         let checkIn = CrawlCheckIn(
             beerName: beerName,
             brewery: brewery,
-            rating: rating,
             notes: notes,
             photoData: photoData,
             latitude: locationManager.currentLocation?.coordinate.latitude,

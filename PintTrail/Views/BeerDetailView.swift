@@ -3,6 +3,7 @@ import MapKit
 
 struct BeerDetailView: View {
     let entry: BeerEntry
+    let totalEntries: Int
 
     var body: some View {
         ScrollView {
@@ -17,13 +18,28 @@ struct BeerDetailView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(entry.name)
-                        .font(.largeTitle.bold())
+                    HStack(alignment: .top) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(entry.name)
+                                .font(.largeTitle.bold())
 
-                    if !entry.brewery.isEmpty {
-                        Text(entry.brewery)
-                            .font(.title3)
-                            .foregroundStyle(.secondary)
+                            if !entry.brewery.isEmpty {
+                                Text(entry.brewery)
+                                    .font(.title3)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+
+                        Spacer()
+
+                        VStack(spacing: 2) {
+                            Text(entry.formattedScore(outOf: totalEntries))
+                                .font(.system(size: 36, weight: .bold))
+                                .foregroundStyle(.orange)
+                            Text("#\(entry.rankPosition + 1) of \(totalEntries)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
                     }
 
                     if !entry.style.isEmpty {
@@ -34,15 +50,6 @@ struct BeerDetailView: View {
                             .background(.secondary.opacity(0.15))
                             .clipShape(Capsule())
                     }
-
-                    HStack(spacing: 4) {
-                        ForEach(1...5, id: \.self) { star in
-                            Image(systemName: star <= entry.rating ? "star.fill" : "star")
-                                .font(.title3)
-                                .foregroundStyle(star <= entry.rating ? .yellow : .secondary)
-                        }
-                    }
-                    .padding(.top, 4)
                 }
 
                 if !entry.notes.isEmpty {
