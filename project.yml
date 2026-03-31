@@ -1,0 +1,27 @@
+name: PintTrail
+options:
+  bundleIdPrefix: com.andrewkim
+  deploymentTarget:
+    iOS: "17.0"
+  xcodeVersion: "16.0"
+targets:
+  PintTrail:
+    type: application
+    platform: iOS
+    sources:
+      - PintTrail
+    info:
+      path: PintTrail/Info.plist
+      properties:
+        NSLocationWhenInUseUsageDescription: "Pint Trail uses your location to tag where you enjoyed your beer."
+        NSPhotoLibraryUsageDescription: "Pint Trail uses your photo library to add beer photos to your journal."
+        NSCameraUsageDescription: "Pint Trail uses your camera to take photos of your beers."
+        UILaunchScreen: {}
+    settings:
+      base:
+        SWIFT_VERSION: "6.0"
+        TARGETED_DEVICE_FAMILY: "1"
+        INFOPLIST_FILE: PintTrail/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.andrewkim.PintTrail
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: 1
