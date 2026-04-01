@@ -10,6 +10,8 @@ struct AddBeerView: View {
     @State private var name = ""
     @State private var brewery = ""
     @State private var style = ""
+    @State private var styleSelection = ""
+    @State private var customStyle = ""
     @State private var notes = ""
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var photoData: Data?
@@ -63,7 +65,27 @@ struct AddBeerView: View {
                     Section("Beer Info") {
                         TextField("Beer Name", text: $name)
                         TextField("Brewery", text: $brewery)
-                        TextField("Style (e.g. IPA, Stout)", text: $style)
+
+                        Picker("Style", selection: $styleSelection) {
+                            Text("Select a style").tag("")
+                            ForEach(BeerStyles.all, id: \.self) { s in
+                                Text(s).tag(s)
+                            }
+                            Text("Custom...").tag("__custom__")
+                        }
+                        .onChange(of: styleSelection) { _, newValue in
+                            if newValue != "__custom__" {
+                                style = newValue
+                                customStyle = ""
+                            }
+                        }
+
+                        if styleSelection == "__custom__" {
+                            TextField("Custom style", text: $customStyle)
+                                .onChange(of: customStyle) { _, newValue in
+                                    style = newValue
+                                }
+                        }
                     }
 
                     Section("Photo") {
@@ -201,6 +223,12 @@ struct AddBeerView: View {
                     name = product.name
                     brewery = product.brand
                     style = product.style
+                    if BeerStyles.all.contains(product.style) {
+                        styleSelection = product.style
+                    } else if !product.style.isEmpty {
+                        styleSelection = "__custom__"
+                        customStyle = product.style
+                    }
 
                     // Try to load product image
                     if let imageURL = product.imageURL {
