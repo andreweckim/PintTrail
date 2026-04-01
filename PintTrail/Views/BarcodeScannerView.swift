@@ -43,7 +43,9 @@ struct BarcodeScannerView: UIViewControllerRepresentable {
         override func viewWillDisappear(_ animated: Bool) {
             super.viewWillDisappear(animated)
             if let session = captureSession, session.isRunning {
-                session.stopRunning()
+                DispatchQueue.global(qos: .userInitiated).async {
+                    session.stopRunning()
+                }
             }
         }
 

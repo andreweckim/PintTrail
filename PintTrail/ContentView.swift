@@ -41,5 +41,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: BeerEntry.self, inMemory: true)
+        .modelContainer(for: [BeerEntry.self, PubCrawl.self, CrawlCheckIn.self], inMemory: true)
 }

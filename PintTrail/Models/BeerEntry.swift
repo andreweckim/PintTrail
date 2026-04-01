@@ -45,7 +45,7 @@ final class BeerEntry {
     /// Convert Elo to a 1.0–10.0 display score based on where this beer
     /// sits within the full range of the user's ratings.
     func displayScore(min: Double, max: Double) -> Double {
-        guard max > min else { return 10.0 }
+        guard max > min else { return 5.5 }
         let normalized = (eloRating - min) / (max - min) // 0.0 to 1.0
         return 1.0 + normalized * 9.0 // 1.0 to 10.0
     }

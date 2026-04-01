@@ -221,5 +221,5 @@ struct AddBeerView: View {
 
 #Preview {
     AddBeerView()
-        .modelContainer(for: BeerEntry.self, inMemory: true)
+        .modelContainer(for: [BeerEntry.self, PubCrawl.self, CrawlCheckIn.self], inMemory: true)
 }

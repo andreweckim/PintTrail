@@ -8,7 +8,7 @@ final class PubCrawl {
     var date: Date
     var isActive: Bool
     var inviteCode: String
-    @Relationship(deleteRule: .cascade) var checkIns: [CrawlCheckIn]
+    @Relationship(deleteRule: .cascade, inverse: \CrawlCheckIn.crawl) var checkIns: [CrawlCheckIn]
 
     init(name: String, date: Date = Date()) {
         self.id = UUID()
