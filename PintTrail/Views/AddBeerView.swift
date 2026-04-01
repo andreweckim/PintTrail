@@ -15,6 +15,8 @@ struct AddBeerView: View {
     @State private var photoData: Data?
     @State private var locationManager = LocationManager()
     @State private var useLocation = true
+    @State private var manualVenue = ""
+    @State private var isEditingLocation = false
 
     @State private var rankingEngine = RankingEngine()
     @State private var pendingEntry: BeerEntry?
@@ -94,15 +96,38 @@ struct AddBeerView: View {
                         Toggle("Tag Location", isOn: $useLocation)
 
                         if useLocation {
-                            if let venue = locationManager.currentVenueName {
-                                Label(venue, systemImage: "mappin.circle.fill")
-                                    .foregroundStyle(.secondary)
+                            if isEditingLocation {
+                                TextField("Venue name", text: $manualVenue)
+                                    .onSubmit { isEditingLocation = false }
+                            } else if !manualVenue.isEmpty {
+                                Button {
+                                    isEditingLocation = true
+                                } label: {
+                                    Label(manualVenue, systemImage: "mappin.circle.fill")
+                                        .foregroundStyle(.secondary)
+                                }
+                            } else if let venue = locationManager.currentVenueName {
+                                Button {
+                                    manualVenue = venue
+                                    isEditingLocation = true
+                                } label: {
+                                    Label(venue, systemImage: "mappin.circle.fill")
+                                        .foregroundStyle(.secondary)
+                                }
                             } else if locationManager.currentLocation != nil {
-                                Label("Location found", systemImage: "location.fill")
-                                    .foregroundStyle(.secondary)
+                                Button {
+                                    isEditingLocation = true
+                                } label: {
+                                    Label("Tap to enter venue", systemImage: "location.fill")
+                                        .foregroundStyle(.secondary)
+                                }
                             } else {
-                                Label("Getting location...", systemImage: "location.slash")
-                                    .foregroundStyle(.secondary)
+                                Button {
+                                    isEditingLocation = true
+                                } label: {
+                                    Label("Enter venue name", systemImage: "location.slash")
+                                        .foregroundStyle(.secondary)
+                                }
                             }
                         }
                     }
@@ -202,7 +227,7 @@ struct AddBeerView: View {
             photoData: photoData,
             latitude: useLocation ? locationManager.currentLocation?.coordinate.latitude : nil,
             longitude: useLocation ? locationManager.currentLocation?.coordinate.longitude : nil,
-            venueName: useLocation ? locationManager.currentVenueName : nil
+            venueName: useLocation ? (manualVenue.isEmpty ? locationManager.currentVenueName : manualVenue) : nil
         )
 
         if existingEntries.isEmpty {

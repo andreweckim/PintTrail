@@ -11,6 +11,8 @@ struct BeerDetailView: View {
 
     @State private var isAdjustingScore = false
     @State private var adjustedScore: Double = 5.5
+    @State private var isEditingLocation = false
+    @State private var editedVenue: String = ""
 
     private var currentScore: Double {
         entry.displayScore(min: eloMin, max: eloMax)
@@ -135,16 +137,55 @@ struct BeerDetailView: View {
                         .ptCard()
                     }
 
-                    if let venue = entry.venueName {
-                        VStack(alignment: .leading, spacing: 6) {
-                            PTSectionHeader(title: "Location")
-                            Label(venue, systemImage: "mappin.circle.fill")
-                                .foregroundStyle(PTTheme.creamDim)
+                    VStack(alignment: .leading, spacing: 6) {
+                        PTSectionHeader(title: "Location")
+
+                        if isEditingLocation {
+                            HStack {
+                                TextField("Venue name", text: $editedVenue)
+                                    .foregroundStyle(PTTheme.cream)
+                                    .onSubmit {
+                                        entry.venueName = editedVenue.isEmpty ? nil : editedVenue
+                                        isEditingLocation = false
+                                    }
+                                Button {
+                                    entry.venueName = editedVenue.isEmpty ? nil : editedVenue
+                                    isEditingLocation = false
+                                } label: {
+                                    Text("Done")
+                                        .font(.subheadline.bold())
+                                        .foregroundStyle(PTTheme.amber)
+                                }
+                            }
+                        } else if let venue = entry.venueName {
+                            Button {
+                                editedVenue = venue
+                                isEditingLocation = true
+                            } label: {
+                                HStack {
+                                    Label(venue, systemImage: "mappin.circle.fill")
+                                        .foregroundStyle(PTTheme.creamDim)
+                                    Spacer()
+                                    Image(systemName: "pencil")
+                                        .font(.caption)
+                                        .foregroundStyle(PTTheme.creamDim.opacity(0.5))
+                                }
+                            }
+                            .buttonStyle(.plain)
+                        } else {
+                            Button {
+                                editedVenue = ""
+                                isEditingLocation = true
+                            } label: {
+                                Label("Add location", systemImage: "plus.circle")
+                                    .foregroundStyle(PTTheme.creamDim.opacity(0.5))
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .ptCard()
                     }
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .ptCard()
 
                     if let lat = entry.latitude, let lon = entry.longitude {
                         Map(initialPosition: .region(MKCoordinateRegion(
