@@ -25,6 +25,7 @@
 		9435F611C7AA90DA9DEEDABA /* RankingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FC6B773AAAF05C8414C748 /* RankingEngine.swift */; };
 		971870BCD8BB687BC912C311 /* CrawlDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C990CB70D55012CFABB9634 /* CrawlDetailView.swift */; };
 		988AAE1780D5A85D3E1344AC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E017F7F7650B7C2FF76EA27 /* SettingsView.swift */; };
+		A2A668943D10DB060AEA1BF6 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854F251FF548D358A01C0C60 /* TestData.swift */; };
 		A60BB3A2C35FE3904A17E6FF /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03754AC962EEECD4DDD5BE0F /* Theme.swift */; };
 		D4EF2418BC8C88E07C0FAE54 /* BarcodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764C64A5C6455E23999E492C /* BarcodeScannerView.swift */; };
 		E78974C6B38FA771E8FB5F09 /* CreateCrawlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA22A97F901723F8E7BE8C /* CreateCrawlView.swift */; };
@@ -53,6 +54,7 @@
 		7C8A48AC1F1EC6CE29F1DA74 /* PintTrailApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PintTrailApp.swift; sourceTree = "<group>"; };
 		7D0C943165A320A55F95DDB0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7E017F7F7650B7C2FF76EA27 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		854F251FF548D358A01C0C60 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		8CF37755F02D94D0E0193E8C /* BeerDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerDetailView.swift; sourceTree = "<group>"; };
 		A849B81943351A538DA2F48C /* BarcodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeService.swift; sourceTree = "<group>"; };
 		D0FC6B773AAAF05C8414C748 /* RankingEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingEngine.swift; sourceTree = "<group>"; };
@@ -128,11 +130,12 @@
 				A849B81943351A538DA2F48C /* BarcodeService.swift */,
 				22A6982C86619EBF5C8178A3 /* LocationManager.swift */,
 				D0FC6B773AAAF05C8414C748 /* RankingEngine.swift */,
+				854F251FF548D358A01C0C60 /* TestData.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
 		};
-		"TEMP_5A10552E-2B60-4663-83D7-169752277129" /* Preview Content */ = {
+		"TEMP_1617B0CD-1D88-42DB-A5AB-9C57989AFC8D" /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -227,6 +230,7 @@
 				9435F611C7AA90DA9DEEDABA /* RankingEngine.swift in Sources */,
 				28C0D8F73C4D4FAFA709FED3 /* RankingView.swift in Sources */,
 				988AAE1780D5A85D3E1344AC /* SettingsView.swift in Sources */,
+				A2A668943D10DB060AEA1BF6 /* TestData.swift in Sources */,
 				A60BB3A2C35FE3904A17E6FF /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

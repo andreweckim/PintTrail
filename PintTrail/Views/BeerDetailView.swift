@@ -2,12 +2,19 @@ import SwiftUI
 import MapKit
 
 struct BeerDetailView: View {
-    let entry: BeerEntry
+    @Bindable var entry: BeerEntry
     let rank: Int
     let totalEntries: Int
     let showScore: Bool
     let eloMin: Double
     let eloMax: Double
+
+    @State private var isAdjustingScore = false
+    @State private var adjustedScore: Double = 5.5
+
+    private var currentScore: Double {
+        entry.displayScore(min: eloMin, max: eloMax)
+    }
 
     var body: some View {
         ZStack {
@@ -40,14 +47,71 @@ struct BeerDetailView: View {
 
                         Spacer()
 
+                        // Tappable score
                         VStack(spacing: 2) {
                             if showScore {
-                                PTScoreBadge(score: entry.formattedDisplayScore(min: eloMin, max: eloMax), size: .largeTitle)
+                                Button {
+                                    adjustedScore = round(currentScore * 2) / 2
+                                    isAdjustingScore.toggle()
+                                } label: {
+                                    VStack(spacing: 2) {
+                                        Text(entry.formattedDisplayScore(min: eloMin, max: eloMax))
+                                            .font(.system(size: 36, weight: .bold))
+                                            .foregroundStyle(PTTheme.amber)
+                                            .shadow(color: PTTheme.amber.opacity(0.4), radius: 6)
+                                        Text("tap to adjust")
+                                            .font(.system(size: 9))
+                                            .foregroundStyle(PTTheme.creamDim.opacity(0.5))
+                                    }
+                                }
+                                .buttonStyle(.plain)
                             }
                             Text("#\(rank) of \(totalEntries)")
                                 .font(.caption)
                                 .foregroundStyle(PTTheme.creamDim)
                         }
+                    }
+
+                    // Score adjustment slider
+                    if isAdjustingScore {
+                        VStack(spacing: 12) {
+                            HStack {
+                                PTSectionHeader(title: "Adjust Score")
+                                Spacer()
+                                Text(String(format: "%.1f", adjustedScore))
+                                    .font(.title3.bold())
+                                    .foregroundStyle(PTTheme.amber)
+                            }
+
+                            Slider(value: $adjustedScore, in: 1.0...10.0, step: 0.5)
+                                .tint(PTTheme.amber)
+
+                            HStack {
+                                Text("1.0")
+                                    .font(.caption)
+                                    .foregroundStyle(PTTheme.creamDim)
+                                Spacer()
+                                Text("10.0")
+                                    .font(.caption)
+                                    .foregroundStyle(PTTheme.creamDim)
+                            }
+
+                            Button {
+                                applyAdjustedScore()
+                                isAdjustingScore = false
+                            } label: {
+                                Text("Apply")
+                                    .font(.subheadline.bold())
+                                    .foregroundStyle(PTTheme.stout)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 10)
+                                    .background(PTTheme.amber)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                            }
+                        }
+                        .padding()
+                        .ptCard()
+                        .transition(.opacity.combined(with: .move(edge: .top)))
                     }
 
                     if !entry.style.isEmpty {
@@ -102,8 +166,16 @@ struct BeerDetailView: View {
                 .padding()
             }
         }
+        .animation(.easeInOut(duration: 0.2), value: isAdjustingScore)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .toolbarBackground(PTTheme.background, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private func applyAdjustedScore() {
+        // Convert the desired 1-10 score back to an Elo rating
+        guard eloMax > eloMin else { return }
+        let normalized = (adjustedScore - 1.0) / 9.0 // 0.0 to 1.0
+        entry.eloRating = eloMin + normalized * (eloMax - eloMin)
     }
 }
